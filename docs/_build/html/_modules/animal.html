@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>animal &mdash; Farm Animal Simulation  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Farm Animal Simulation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/animal.html">Animal Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/farm_animals.html">Farm Animals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/farm.html">Farm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/farm_gui.html">Farm GUI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Farm Animal Simulation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">animal</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for animal</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<div class="viewcode-block" id="Animal">
+<a class="viewcode-back" href="../modules/animal.html#animal.Animal">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Animal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for all farm animals.</span>
+<span class="sd">    This class handles the basic properties and behaviors of animals.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c1"># Initialize animal properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="c1"># Random starting values between 0 and 100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hunger</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># How hungry the animal is (0-100)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boredom</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># How bored the animal is (0-100)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">health</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Animal starts with full health</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Animal starts at 0 days old</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_alive</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Animal starts alive</span>
+
+<div class="viewcode-block" id="Animal.feed">
+<a class="viewcode-back" href="../modules/animal.html#animal.Animal.feed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">feed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Feed the animal to reduce hunger and increase health.</span>
+<span class="sd">        Returns a message about the feeding result.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_alive</span><span class="p">:</span>
+            <span class="c1"># Reduce hunger by 30 points, but not below 0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hunger</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hunger</span> <span class="o">-</span> <span class="mi">30</span><span class="p">)</span>
+            <span class="c1"># Increase health by 5 points, but not above 100</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">health</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">health</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has been fed. Hunger level: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hunger</span><span class="si">}</span><span class="s2">%&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is no longer alive.&quot;</span></div>
+
+
+<div class="viewcode-block" id="Animal.play">
+<a class="viewcode-back" href="../modules/animal.html#animal.Animal.play">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Play with the animal to reduce boredom.</span>
+<span class="sd">        Playing increases hunger slightly.</span>
+<span class="sd">        Returns a message about the play result.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_alive</span><span class="p">:</span>
+            <span class="c1"># Reduce boredom by 30 points, but not below 0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">boredom</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">boredom</span> <span class="o">-</span> <span class="mi">30</span><span class="p">)</span>
+            <span class="c1"># Increase hunger by 10 points, but not above 100</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hunger</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hunger</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has played. Boredom level: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">boredom</span><span class="si">}</span><span class="s2">%&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is no longer alive.&quot;</span></div>
+
+
+<div class="viewcode-block" id="Animal.update">
+<a class="viewcode-back" href="../modules/animal.html#animal.Animal.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update animal&#39;s state each day.</span>
+<span class="sd">        Increases hunger and boredom, and checks health.</span>
+<span class="sd">        Returns a message if the animal dies.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_alive</span><span class="p">:</span>
+            <span class="c1"># Random increase in hunger and boredom each day</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hunger</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hunger</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">boredom</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">boredom</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Animal gets one day older</span>
+            
+            <span class="c1"># If animal is too hungry or bored, health decreases</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hunger</span> <span class="o">&gt;=</span> <span class="mi">100</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">boredom</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">health</span> <span class="o">-=</span> <span class="mi">20</span>
+                
+            <span class="c1"># If health reaches 0, animal dies</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">health</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_alive</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has passed away.&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Animal.get_status">
+<a class="viewcode-back" href="../modules/animal.html#animal.Animal.get_status">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the current status of the animal.</span>
+<span class="sd">        Returns a dictionary with all animal properties.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;hunger&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hunger</span><span class="p">,</span>
+            <span class="s2">&quot;boredom&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">boredom</span><span class="p">,</span>
+            <span class="s2">&quot;health&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">health</span><span class="p">,</span>
+            <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">,</span>
+            <span class="s2">&quot;is_alive&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_alive</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+Farm Animals Module
+=================
+
+.. automodule:: farm_animals
+   :members:
+   :undoc-members:
+   :show-inheritance: 

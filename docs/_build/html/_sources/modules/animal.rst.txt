@@ -1,0 +1,65 @@
+Animal Module
+============
+
+The Animal module provides the base class for all animals in the farm simulation.
+
+Animal Class
+-----------
+
+.. autoclass:: animal.Animal
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Description
+~~~~~~~~~~
+
+The Animal class is the base class for all animals in the farm simulation. It provides the core functionality for managing animal states and behaviors.
+
+Properties
+~~~~~~~~~
+
+* **name**: The animal's name
+* **hunger**: Current hunger level (0-100)
+* **boredom**: Current boredom level (0-100)
+* **health**: Current health level (0-100)
+* **age**: Animal's age in days
+* **is_alive**: Whether the animal is alive
+
+Methods
+~~~~~~~
+
+.. automethod:: animal.Animal.feed
+   :noindex:
+
+.. automethod:: animal.Animal.play
+   :noindex:
+
+.. automethod:: animal.Animal.update
+   :noindex:
+
+.. automethod:: animal.Animal.get_status
+   :noindex:
+
+Example Usage
+~~~~~~~~~~~
+
+.. code-block:: python
+
+   from animal import Animal
+   
+   # Create a new animal
+   animal = Animal("Bessie")
+   
+   # Feed the animal
+   message = animal.feed()
+   print(message)  # "Bessie has been fed. Hunger level: 70%"
+   
+   # Play with the animal
+   message = animal.play()
+   print(message)  # "Bessie has played. Boredom level: 40%"
+   
+   # Update animal state
+   message = animal.update()
+   if message:
+       print(message)  # Message if animal dies 

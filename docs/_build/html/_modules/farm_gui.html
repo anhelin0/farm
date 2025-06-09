@@ -1,0 +1,495 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>farm_gui &mdash; Farm Animal Simulation  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Farm Animal Simulation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/animal.html">Animal Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/farm_animals.html">Farm Animals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/farm.html">Farm Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/farm_gui.html">Farm GUI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Farm Animal Simulation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">farm_gui</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for farm_gui</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="kn">import</span> <span class="n">ttk</span><span class="p">,</span> <span class="n">messagebox</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">farm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Farm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">farm_animals</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cow</span><span class="p">,</span> <span class="n">Chicken</span><span class="p">,</span> <span class="n">Sheep</span><span class="p">,</span> <span class="n">Pig</span><span class="p">,</span> <span class="n">Horse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<div class="viewcode-block" id="FarmGUI">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FarmGUI</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;🐄 Farm Animal Simulation 🐓&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="s2">&quot;800x800&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">farm</span> <span class="o">=</span> <span class="n">Farm</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_animal</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_paused</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_started</span> <span class="o">=</span> <span class="kc">False</span>
+        
+        <span class="c1"># Configure style</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">style</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Style</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;TFrame&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#f0f0f0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;TLabel&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#f0f0f0&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;TButton&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;Treeview&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;Treeview.Heading&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">))</span>
+        
+        <span class="c1"># Create main frame with padding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;20&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">S</span><span class="p">))</span>
+        
+        <span class="c1"># Configure grid weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">columnconfigure</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">rowconfigure</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_frame</span><span class="o">.</span><span class="n">columnconfigure</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_frame</span><span class="o">.</span><span class="n">rowconfigure</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_frame</span><span class="o">.</span><span class="n">rowconfigure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_frame</span><span class="o">.</span><span class="n">rowconfigure</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="c1"># Create animal list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_animal_list</span><span class="p">()</span>
+        
+        <span class="c1"># Create control buttons</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_control_buttons</span><span class="p">()</span>
+        
+        <span class="c1"># Create status display</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_status_display</span><span class="p">()</span>
+        
+        <span class="c1"># Update initial animal list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_animal_list</span><span class="p">()</span>
+        
+        <span class="c1"># Start update thread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">update_loop</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_thread</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<div class="viewcode-block" id="FarmGUI.create_animal_list">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.create_animal_list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_animal_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Animal list frame</span>
+        <span class="n">list_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🐾 Animals (Click to select)&quot;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;10&quot;</span><span class="p">)</span>
+        <span class="n">list_frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">S</span><span class="p">),</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="c1"># Create treeview with custom columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Treeview</span><span class="p">(</span><span class="n">list_frame</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="s2">&quot;Hunger&quot;</span><span class="p">,</span> <span class="s2">&quot;Boredom&quot;</span><span class="p">,</span> <span class="s2">&quot;Health&quot;</span><span class="p">,</span> <span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="s2">&quot;Status&quot;</span><span class="p">),</span>
+                                <span class="n">show</span><span class="o">=</span><span class="s2">&quot;headings&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        
+        <span class="c1"># Configure columns</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Hunger&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Boredom&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Health&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Status&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="p">]</span>
+        
+        <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">width</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">heading</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">CENTER</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">S</span><span class="p">))</span>
+        
+        <span class="c1"># Add scrollbar</span>
+        <span class="n">scrollbar</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Scrollbar</span><span class="p">(</span><span class="n">list_frame</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">yview</span><span class="p">)</span>
+        <span class="n">scrollbar</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">S</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">yscrollcommand</span><span class="o">=</span><span class="n">scrollbar</span><span class="o">.</span><span class="n">set</span><span class="p">)</span>
+        
+        <span class="c1"># Bind selection event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;&lt;&lt;TreeviewSelect&gt;&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_animal_select</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.create_control_buttons">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.create_control_buttons">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_control_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Control buttons frame</span>
+        <span class="n">control_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🎮 Controls&quot;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;10&quot;</span><span class="p">)</span>
+        <span class="n">control_frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">),</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="c1"># Add start button at the top</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_btn</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">control_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;▶️ Start Game&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_game</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_btn</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="c1"># Create sections for different types of controls</span>
+        <span class="n">care_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span><span class="n">control_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Care Options&quot;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;5&quot;</span><span class="p">)</span>
+        <span class="n">care_frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">),</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="c1"># Individual care buttons</span>
+        <span class="n">individual_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">care_frame</span><span class="p">)</span>
+        <span class="n">individual_frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">ttk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">individual_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Individual Care:&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">individual_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🍽️ Feed Selected&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feed_selected</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">individual_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🎮 Play with Selected&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">play_with_selected</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="c1"># Group care buttons</span>
+        <span class="n">group_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">care_frame</span><span class="p">)</span>
+        <span class="n">group_frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">ttk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">group_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Group Care:&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">group_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🍽️ Feed All&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feed_all</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">group_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;🎮 Play with All&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">play_with_all</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="c1"># Breeding section</span>
+        <span class="n">breeding_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span><span class="n">control_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Breeding&quot;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;5&quot;</span><span class="p">)</span>
+        <span class="n">breeding_frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">),</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="c1"># Add breeding buttons with counts</span>
+        <span class="n">animal_types</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;🐄 Cows&quot;</span><span class="p">,</span> <span class="n">Cow</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;🐓 Chickens&quot;</span><span class="p">,</span> <span class="n">Chicken</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;🐑 Sheep&quot;</span><span class="p">,</span> <span class="n">Sheep</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;🐖 Pigs&quot;</span><span class="p">,</span> <span class="n">Pig</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;🐎 Horses&quot;</span><span class="p">,</span> <span class="n">Horse</span><span class="p">)</span>
+        <span class="p">]</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">animal_type</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">animal_types</span><span class="p">):</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">get_animal_count</span><span class="p">(</span><span class="n">animal_type</span><span class="p">)</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">breeding_frame</span><span class="p">,</span> 
+                           <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> 
+                           <span class="n">command</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="o">=</span><span class="n">animal_type</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">breed_animals</span><span class="p">(</span><span class="n">t</span><span class="p">),</span>
+                           <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+            <span class="n">btn</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">i</span><span class="o">//</span><span class="mi">3</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">i</span><span class="o">%</span><span class="mi">3</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="c1"># Add new animal section</span>
+        <span class="n">add_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span><span class="n">control_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Add New Animals&quot;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;5&quot;</span><span class="p">)</span>
+        <span class="n">add_frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">),</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="n">add_btn</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">add_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;➕ Add New Animal&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show_add_animal_dialog</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">add_btn</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.show_add_animal_dialog">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.show_add_animal_dialog">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_add_animal_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show dialog to add a new animal&quot;&quot;&quot;</span>
+        <span class="n">dialog</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Toplevel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Add New Animal&quot;</span><span class="p">)</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="s2">&quot;300x200&quot;</span><span class="p">)</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">transient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">grab_set</span><span class="p">()</span>
+        
+        <span class="c1"># Create frame</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">dialog</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;10&quot;</span><span class="p">)</span>
+        <span class="n">frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">S</span><span class="p">))</span>
+        
+        <span class="c1"># Animal type selection</span>
+        <span class="n">ttk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Select Animal Type:&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">animal_type</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">StringVar</span><span class="p">()</span>
+        <span class="n">animal_types</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;🐄 Cow&quot;</span><span class="p">,</span> <span class="n">Cow</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;🐓 Chicken&quot;</span><span class="p">,</span> <span class="n">Chicken</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;🐑 Sheep&quot;</span><span class="p">,</span> <span class="n">Sheep</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;🐖 Pig&quot;</span><span class="p">,</span> <span class="n">Pig</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;🐎 Horse&quot;</span><span class="p">,</span> <span class="n">Horse</span><span class="p">)</span>
+        <span class="p">]</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">animal_types</span><span class="p">):</span>
+            <span class="n">ttk</span><span class="o">.</span><span class="n">Radiobutton</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">animal_type</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="k">def</span><span class="w"> </span><span class="nf">add_animal</span><span class="p">():</span>
+            <span class="n">selected_type</span> <span class="o">=</span> <span class="n">animal_type</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">selected_type</span><span class="p">:</span>
+                <span class="c1"># Extract animal class from selection</span>
+                <span class="n">animal_class</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">cls</span> <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">animal_types</span> <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="n">selected_type</span><span class="p">)</span>
+                <span class="c1"># Create new animal</span>
+                <span class="n">new_animal</span> <span class="o">=</span> <span class="n">animal_class</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New</span><span class="si">{</span><span class="n">animal_class</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">animals</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">add_animal</span><span class="p">(</span><span class="n">new_animal</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;Added new </span><span class="si">{</span><span class="n">animal_class</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> to the farm!&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_animal_list</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">create_control_buttons</span><span class="p">()</span>  <span class="c1"># Update counts</span>
+                <span class="n">dialog</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">messagebox</span><span class="o">.</span><span class="n">showwarning</span><span class="p">(</span><span class="s2">&quot;Warning&quot;</span><span class="p">,</span> <span class="s2">&quot;Please select an animal type!&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Add button</span>
+        <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Add Animal&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="n">add_animal</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">animal_types</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.create_status_display">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.create_status_display">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_status_display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Status display frame</span>
+        <span class="n">status_frame</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;📝 Status Messages&quot;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;10&quot;</span><span class="p">)</span>
+        <span class="n">status_frame</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">),</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="c1"># Create text widget with custom font</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">status_frame</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">))</span>
+        
+        <span class="c1"># Add scrollbar</span>
+        <span class="n">scrollbar</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Scrollbar</span><span class="p">(</span><span class="n">status_frame</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">status_text</span><span class="o">.</span><span class="n">yview</span><span class="p">)</span>
+        <span class="n">scrollbar</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">S</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">yscrollcommand</span><span class="o">=</span><span class="n">scrollbar</span><span class="o">.</span><span class="n">set</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.on_animal_select">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.on_animal_select">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_animal_select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle animal selection&quot;&quot;&quot;</span>
+        <span class="n">selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">selection</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">selection</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">selection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">item</span><span class="p">)[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span>
+            <span class="n">animal_name</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Remove emoji and get name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_animal</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">animals</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">animal_name</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;Selected animal: </span><span class="si">{</span><span class="n">animal_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_animal</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.feed_selected">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.feed_selected">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">feed_selected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Feed the selected animal&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_animal</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_animal</span><span class="o">.</span><span class="n">feed</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="n">message</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_animal_list</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="s2">&quot;Please select an animal first!&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.play_with_selected">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.play_with_selected">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">play_with_selected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Play with the selected animal&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_animal</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_animal</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="n">message</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_animal_list</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="s2">&quot;Please select an animal first!&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.update_animal_list">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.update_animal_list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_animal_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Clear existing items</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">get_children</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        
+        <span class="c1"># Add current animals with emojis</span>
+        <span class="n">emoji_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Cow&quot;</span><span class="p">:</span> <span class="s2">&quot;🐄&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Chicken&quot;</span><span class="p">:</span> <span class="s2">&quot;🐓&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Sheep&quot;</span><span class="p">:</span> <span class="s2">&quot;🐑&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pig&quot;</span><span class="p">:</span> <span class="s2">&quot;🐖&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Horse&quot;</span><span class="p">:</span> <span class="s2">&quot;🐎&quot;</span>
+        <span class="p">}</span>
+        
+        <span class="k">for</span> <span class="n">animal</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">animals</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;❤️ Alive&quot;</span> <span class="k">if</span> <span class="n">animal</span><span class="o">.</span><span class="n">is_alive</span> <span class="k">else</span> <span class="s2">&quot;💔 Deceased&quot;</span>
+            <span class="n">animal_type</span> <span class="o">=</span> <span class="n">animal</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">emoji</span> <span class="o">=</span> <span class="n">emoji_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">animal_type</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">emoji</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">animal</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">emoji</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">animal_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;🍽️&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">animal</span><span class="o">.</span><span class="n">hunger</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;⚠️&#39;</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">animal</span><span class="o">.</span><span class="n">hunger</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;😊&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">animal</span><span class="o">.</span><span class="n">boredom</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;😫&#39;</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">animal</span><span class="o">.</span><span class="n">boredom</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;💪&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">animal</span><span class="o">.</span><span class="n">health</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;🤒&#39;</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">animal</span><span class="o">.</span><span class="n">health</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">animal</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2"> days&quot;</span><span class="p">,</span>
+                <span class="n">status</span>
+            <span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.feed_all">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.feed_all">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">feed_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">feed_all</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_animal_list</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.play_with_all">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.play_with_all">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">play_with_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">play_with_all</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_animal_list</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.breed_animals">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.breed_animals">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">breed_animals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">animal_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Breed animals and update the interface&quot;&quot;&quot;</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">breed_animals</span><span class="p">(</span><span class="n">animal_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="n">message</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_animal_list</span><span class="p">()</span>
+        <span class="c1"># Update breeding buttons to show new counts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_control_buttons</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.add_status_messages">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.add_status_messages">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_status_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;📢 </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span><span class="o">.</span><span class="n">see</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.start_game">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.start_game">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start the game&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_started</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game_started</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_paused</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_btn</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;⏸️ Pause Game&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">toggle_pause</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="s2">&quot;Game started! Take care of your animals!&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toggle_pause</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.toggle_pause">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.toggle_pause">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">toggle_pause</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Toggle game pause state&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_paused</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_paused</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_paused</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_btn</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;▶️ Resume Game&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="s2">&quot;Game paused&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_btn</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;⏸️ Pause Game&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">([</span><span class="s2">&quot;Game resumed&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.check_game_over">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.check_game_over">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_game_over</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if all animals are dead&quot;&quot;&quot;</span>
+        <span class="n">alive_animals</span> <span class="o">=</span> <span class="p">[</span><span class="n">animal</span> <span class="k">for</span> <span class="n">animal</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">animals</span> <span class="k">if</span> <span class="n">animal</span><span class="o">.</span><span class="n">is_alive</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">alive_animals</span><span class="p">:</span>
+            <span class="n">messagebox</span><span class="o">.</span><span class="n">showinfo</span><span class="p">(</span><span class="s2">&quot;Game Over&quot;</span><span class="p">,</span> <span class="s2">&quot;All animals have passed away. The game is over!&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">destroy</span><span class="p">)</span>  <span class="c1"># Close the game after 1 second</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.update_loop">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.update_loop">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_paused</span><span class="p">:</span>  <span class="c1"># Only update if not paused</span>
+                <span class="n">messages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">farm</span><span class="o">.</span><span class="n">update_all</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">messages</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_status_messages</span><span class="p">,</span> <span class="n">messages</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_animal_list</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_game_over</span><span class="p">)</span>  <span class="c1"># Check for game over after each update</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># Update every 5 seconds</span></div>
+
+
+<div class="viewcode-block" id="FarmGUI.on_closing">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.FarmGUI.on_closing">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_closing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span></div>
+</div>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../modules/farm_gui.html#farm_gui.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">FarmGUI</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="n">root</span><span class="o">.</span><span class="n">protocol</span><span class="p">(</span><span class="s2">&quot;WM_DELETE_WINDOW&quot;</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">on_closing</span><span class="p">)</span>
+    <span class="n">root</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span> 
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

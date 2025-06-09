@@ -1,0 +1,4 @@
+# Core requirements
+tkinter  # Usually comes with Python
+sphinx  # For documentation
+sphinx-rtd-theme  # For documentation theme 
