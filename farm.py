@@ -34,11 +34,6 @@ class Farm:
         """Add a new animal to the farm"""
         self.animals.append(animal)
 
-    def remove_animal(self, animal):
-        """Remove an animal from the farm"""
-        if animal in self.animals:
-            self.animals.remove(animal)
-
     def feed_all(self):
         """Feed all alive animals on the farm"""
         messages = []
